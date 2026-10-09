@@ -9,7 +9,6 @@ import NaoEncontrada from './pages/NaoEncontrada';
 
 const CHAVE_FAVORITOS = 'filmes-favoritos';
 
-// Lê a lista salva no navegador; qualquer valor inválido vira uma lista vazia.
 function carregarFavoritos() {
   try {
     const salvo = localStorage.getItem(CHAVE_FAVORITOS);
@@ -21,25 +20,22 @@ function carregarFavoritos() {
 }
 
 function App() {
-  // A função inicial roda só na primeira renderização e já traz os favoritos salvos.
   const [favoritos, setFavoritos] = useState(carregarFavoritos);
 
-  // Sempre que a lista muda, grava a nova versão no localStorage.
   useEffect(() => {
     try {
       localStorage.setItem(CHAVE_FAVORITOS, JSON.stringify(favoritos));
     } catch {
-      // Armazenamento cheio ou bloqueado: a lista continua funcionando até recarregar a página.
+      // storage cheio ou bloqueado: a lista segue funcionando até recarregar
     }
   }, [favoritos]);
 
-  // Imutabilidade: nunca alteramos o array atual, sempre criamos um novo.
   function alternarFavorito(filme) {
     setFavoritos((atual) => {
       if (atual.some((f) => f.id === filme.id)) {
         return atual.filter((f) => f.id !== filme.id);
       }
-      // Guarda só o necessário para desenhar o card sem nova requisição.
+      // só o que o card precisa, pra não refazer a requisição
       const resumo = {
         id: filme.id,
         title: filme.title,

@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 function Layout({ totalFavoritos }) {
   const { pathname } = useLocation();
 
-  // Ao trocar de página, volta ao topo (o BrowserRouter não faz isso sozinho).
+  // o BrowserRouter não volta ao topo sozinho ao trocar de rota
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -15,7 +15,6 @@ function Layout({ totalFavoritos }) {
       <Navbar totalFavoritos={totalFavoritos} />
 
       <main className="conteudo">
-        {/* Aqui entra a página da rota atual */}
         <Outlet />
       </main>
 

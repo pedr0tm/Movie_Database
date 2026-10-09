@@ -19,24 +19,22 @@ function formatarDuracao(minutos) {
 }
 
 function Detalhes({ favoritos, onToggleFavorito }) {
-  // Pega o :id da URL /filme/:id
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
   const [filme, setFilme] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
 
-  // Roda de novo sempre que o id da URL mudar.
   useEffect(() => {
-    setLoading(true);
+    setCarregando(true);
     setErro(null);
     setFilme(null);
 
     if (!TEM_CHAVE) {
       setErro(ERRO_SEM_CHAVE);
-      setLoading(false);
+      setCarregando(false);
       return;
     }
 
@@ -49,11 +47,11 @@ function Detalhes({ favoritos, onToggleFavorito }) {
         if (!resposta.ok) throw new Error(descreverErroHttp(resposta.status));
 
         setFilme(await resposta.json());
-        setLoading(false);
-      } catch (e) {
-        if (e.name === 'AbortError') return;
-        setErro(mensagemDoErro(e));
-        setLoading(false);
+        setCarregando(false);
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+        setErro(mensagemDoErro(err));
+        setCarregando(false);
       }
     }
 
@@ -62,8 +60,7 @@ function Detalhes({ favoritos, onToggleFavorito }) {
     return () => controlador.abort();
   }, [id]);
 
-  // Navegação programática: volta uma página no histórico.
-  // Se a pessoa abriu o link direto (sem histórico no app), vai para a Home.
+  // location.key é 'default' quando a página foi aberta direto pela URL, sem histórico para voltar
   function voltar() {
     if (location.key === 'default') {
       navigate('/');
@@ -78,7 +75,7 @@ function Detalhes({ favoritos, onToggleFavorito }) {
     </button>
   );
 
-  if (loading) {
+  if (carregando) {
     return (
       <section>
         {botaoVoltar}

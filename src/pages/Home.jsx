@@ -10,14 +10,13 @@ import {
 
 function Home({ favoritos, onToggleFavorito }) {
   const [filmes, setFilmes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
 
-  // Array de dependências vazio: busca os filmes uma única vez, quando a página abre.
   useEffect(() => {
     if (!TEM_CHAVE) {
       setErro(ERRO_SEM_CHAVE);
-      setLoading(false);
+      setCarregando(false);
       return;
     }
 
@@ -31,17 +30,16 @@ function Home({ favoritos, onToggleFavorito }) {
 
         const dados = await resposta.json();
         setFilmes(dados.results);
-        setLoading(false);
-      } catch (e) {
-        if (e.name === 'AbortError') return;
-        setErro(mensagemDoErro(e));
-        setLoading(false);
+        setCarregando(false);
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+        setErro(mensagemDoErro(err));
+        setCarregando(false);
       }
     }
 
     carregarPopulares();
 
-    // Cancela a requisição se a página for fechada antes da resposta chegar.
     return () => controlador.abort();
   }, []);
 
@@ -49,7 +47,7 @@ function Home({ favoritos, onToggleFavorito }) {
     <section>
       <h1 className="titulo-pagina">Filmes populares</h1>
 
-      {loading && (
+      {carregando && (
         <div className="status" role="status">
           <span className="spinner" aria-hidden="true" />
           Carregando filmes...
@@ -62,7 +60,7 @@ function Home({ favoritos, onToggleFavorito }) {
         </p>
       )}
 
-      {!loading && !erro && (
+      {!carregando && !erro && (
         <div className="grade">
           {filmes.map((filme) => (
             <MovieCard

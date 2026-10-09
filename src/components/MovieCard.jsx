@@ -7,7 +7,7 @@ function MovieCard({ filme, favorito, onToggleFavorito }) {
 
   return (
     <article className="card">
-      {/* O título já é um link acessível para o mesmo destino; o poster é só um atalho visual. */}
+      {/* o link do título já leva ao mesmo lugar, então o poster fica fora do foco */}
       <Link to={`/filme/${filme.id}`} className="card-poster" aria-hidden="true" tabIndex={-1}>
         {poster ? (
           <img src={poster} alt="" loading="lazy" />

@@ -39,8 +39,6 @@ img {
   outline-offset: 2px;
 }
 
-/* ---------- Layout ---------- */
-
 .layout {
   min-height: 100vh;
 }
@@ -129,8 +127,6 @@ img {
   text-align: center;
 }
 
-/* ---------- Textos e mensagens ---------- */
-
 .titulo-pagina {
   margin: 0 0 20px;
   font-size: 1.6rem;
@@ -182,8 +178,6 @@ img {
     animation-duration: 3s;
   }
 }
-
-/* ---------- Grade e cards ---------- */
 
 .grade {
   display: grid;
@@ -263,8 +257,6 @@ img {
   font-weight: 400;
 }
 
-/* ---------- Botões ---------- */
-
 button {
   font: inherit;
   cursor: pointer;
@@ -314,8 +306,6 @@ button {
   text-decoration: none;
 }
 
-/* ---------- Busca ---------- */
-
 .form-busca {
   display: flex;
   gap: 8px;
@@ -344,8 +334,6 @@ button {
   color: #1a1400;
   font-weight: 700;
 }
-
-/* ---------- Detalhes ---------- */
 
 .detalhes {
   display: grid;
@@ -399,8 +387,6 @@ button {
   background: var(--superficie);
   font-size: 0.85rem;
 }
-
-/* ---------- 404 ---------- */
 
 .pagina-404 {
   padding: 48px 0;
