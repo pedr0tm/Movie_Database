@@ -22,8 +22,8 @@ public class ReservaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Reserva reservar(@Valid @RequestBody NovaReservaRequest request) {
-        return service.reservar(request.usuarioId(), request.residuoId());
+    public Reserva cadastrar(@Valid @RequestBody NovaReservaRequest request) {
+        return service.cadastrar(request.usuarioId(), request.residuoId());
     }
 
     @GetMapping
@@ -38,12 +38,13 @@ public class ReservaController {
 
     @PutMapping("/{id}")
     public Reserva atualizar(@PathVariable Long id, @Valid @RequestBody AtualizarReservaRequest request) {
-        return service.atualizarStatus(id, request.status());
+        return service.atualizar(id, request.status());
     }
 
-    @PatchMapping("/{id}/cancelar")
-    public Reserva cancelar(@PathVariable Long id) {
-        return service.cancelar(id);
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluir(@PathVariable Long id) {
+        service.excluir(id);
     }
 
     // Dados recebidos para criar uma reserva

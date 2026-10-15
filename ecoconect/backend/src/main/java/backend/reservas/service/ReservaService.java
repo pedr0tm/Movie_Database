@@ -3,6 +3,8 @@ package backend.reservas.service;
 import backend.reservas.model.Reserva;
 import backend.reservas.model.Reserva.StatusReserva;
 import backend.reservas.repository.ReservaRepository;
+import backend.residuos.model.Residuo;
+import backend.residuos.repository.ResiduoRepository;
 import backend.usuarios.model.Usuario;
 import backend.usuarios.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -21,19 +23,26 @@ public class ReservaService {
 
     private final ReservaRepository repository;
     private final UsuarioService usuarioService;
+    private final ResiduoRepository residuoRepository;
 
-    public ReservaService(ReservaRepository repository, UsuarioService usuarioService) {
+    public ReservaService(ReservaRepository repository, UsuarioService usuarioService, ResiduoRepository residuoRepository) {
         this.repository = repository;
         this.usuarioService = usuarioService;
+        this.residuoRepository = residuoRepository;
     }
 
-    // Reservar coleta
-    public Reserva reservar(Long usuarioId, Long residuoId) {
+    // Cadastrar reserva
+    public Reserva cadastrar(Long usuarioId, Long residuoId) {
         Usuario usuario = usuarioService.buscarPorId(usuarioId);
+        Residuo residuo = residuoRepository.findById(residuoId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Resíduo não encontrado"
+                ));
 
         // Resíduo já reservado ou coletado não pode ser reservado novamente
-        if (repository.existsByResiduoIdAndStatusIn(
-                residuoId, List.of(StatusReserva.RESERVADA, StatusReserva.COLETADA))) {
+        if (repository.existsByResiduoAndStatusIn(
+                residuo, List.of(StatusReserva.RESERVADA, StatusReserva.COLETADA))) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Resíduo indisponível para reserva");
         }
 
@@ -47,7 +56,7 @@ public class ReservaService {
 
         Reserva reserva = new Reserva();
         reserva.setUsuario(usuario);
-        reserva.setResiduoId(residuoId);
+        reserva.setResiduo(residuo);
         reserva.setStatus(StatusReserva.RESERVADA);
         reserva.setDataReserva(LocalDateTime.now());
 
@@ -69,14 +78,14 @@ public class ReservaService {
     }
 
     // Atualizar status da reserva (registrar coleta)
-    public Reserva atualizarStatus(Long id, StatusReserva novoStatus) {
+    public Reserva atualizar(Long id, StatusReserva novoStatus) {
         Reserva reserva = buscarPorId(id);
         verificarReservada(reserva);
 
         if (novoStatus != StatusReserva.COLETADA) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "A atualização aceita apenas o status COLETADA. Para cancelar, use PATCH /reservas/{id}/cancelar"
+                    "A atualização aceita apenas o status COLETADA. Para cancelar, use DELETE /reservas/{id}"
             );
         }
 
@@ -84,13 +93,13 @@ public class ReservaService {
         return repository.save(reserva);
     }
 
-    // Cancelar reserva (o registro é mantido para histórico)
-    public Reserva cancelar(Long id) {
+    // Excluir reserva: ela é cancelada e o registro fica no banco, para o histórico e para o limite mensal
+    public void excluir(Long id) {
         Reserva reserva = buscarPorId(id);
         verificarReservada(reserva);
 
         reserva.setStatus(StatusReserva.CANCELADA);
-        return repository.save(reserva);
+        repository.save(reserva);
     }
 
     // Apenas reservas ativas podem ser alteradas

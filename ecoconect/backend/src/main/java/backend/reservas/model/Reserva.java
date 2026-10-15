@@ -1,5 +1,6 @@
 package backend.reservas.model;
 
+import backend.residuos.model.Residuo;
 import backend.usuarios.model.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -30,9 +31,9 @@ public class Reserva {
     @ManyToOne(optional = false)
     private Usuario usuario;
 
-    // Id do resíduo reservado (o módulo de resíduos ainda não é uma entidade JPA)
-    @Column(nullable = false)
-    private Long residuoId;
+    // Resíduo reservado
+    @ManyToOne(optional = false)
+    private Residuo residuo;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
