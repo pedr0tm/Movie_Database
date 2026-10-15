@@ -193,7 +193,7 @@ A API estará disponível em:
 |---|---|
 | Usuários | CRUD implementado e testado |
 | Resíduos | Classes criadas — CRUD pendente |
-| Reservas | Classes criadas — CRUD pendente |
+| Reservas | CRUD implementado |
 | Planos de assinatura | Classes criadas — CRUD pendente |
 | Administração e termos | Classes criadas — funcionalidades pendentes |
 
@@ -220,6 +220,38 @@ O módulo de usuários já possui:
 | GET | `/usuarios/{id}` | Consultar usuário |
 | PUT | `/usuarios/{id}` | Atualizar usuário |
 | DELETE | `/usuarios/{id}` | Excluir usuário |
+
+### CRUD de reservas
+
+O módulo de reservas já possui:
+
+- Reserva de coleta, que começa com o status `RESERVADA`.
+- Listagem de reservas.
+- Consulta por ID.
+- Atualização do status para `COLETADA`.
+- Cancelamento, que mantém o registro com o status `CANCELADA`.
+- Bloqueio de resíduos já reservados ou coletados (HTTP 409).
+- Limite de 4 coletas por mês, conforme o plano Gratuito (HTTP 409).
+- Tratamento de erros HTTP 400, 404 e 409.
+
+**Endpoints disponíveis:**
+
+| Método | Endpoint | Operação |
+|---|---|---|
+| POST | `/reservas` | Reservar coleta |
+| GET | `/reservas` | Listar reservas |
+| GET | `/reservas/{id}` | Consultar reserva |
+| PUT | `/reservas/{id}` | Atualizar status (somente `COLETADA`) |
+| PATCH | `/reservas/{id}/cancelar` | Cancelar reserva |
+
+Exemplo de corpo para criar uma reserva:
+
+```json
+{
+  "usuarioId": 1,
+  "residuoId": 5
+}
+```
 
 ## Divisão de responsabilidades
 
