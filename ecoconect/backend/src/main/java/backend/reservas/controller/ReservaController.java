@@ -1,7 +1,7 @@
 package backend.reservas.controller;
 
 import backend.reservas.model.Reserva;
-import backend.reservas.model.StatusReserva;
+import backend.reservas.model.Reserva.StatusReserva;
 import backend.reservas.service.ReservaService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

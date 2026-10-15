@@ -15,6 +15,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Reserva {
 
+    // Situação da reserva: ativa, coletada ou cancelada
+    public enum StatusReserva {
+        RESERVADA,
+        COLETADA,
+        CANCELADA
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

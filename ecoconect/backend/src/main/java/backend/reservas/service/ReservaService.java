@@ -1,7 +1,7 @@
 package backend.reservas.service;
 
 import backend.reservas.model.Reserva;
-import backend.reservas.model.StatusReserva;
+import backend.reservas.model.Reserva.StatusReserva;
 import backend.reservas.repository.ReservaRepository;
 import backend.usuarios.model.Usuario;
 import backend.usuarios.service.UsuarioService;

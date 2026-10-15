@@ -1,7 +1,7 @@
 package backend.reservas.repository;
 
 import backend.reservas.model.Reserva;
-import backend.reservas.model.StatusReserva;
+import backend.reservas.model.Reserva.StatusReserva;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
